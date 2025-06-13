@@ -8,8 +8,8 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('master_item_kategori_item', function (Blueprint $table) {
-            $table->foreignId('master_item_id')->constrained('master_items');
-            $table->foreignId('kategori_items_id')->constrained('kategori_items');
+            $table->foreignId('master_item_id')->constrained('master_items')->cascadeOnDelete();
+            $table->foreignId('kategori_items_id')->constrained('kategori_items')->cascadeOnDelete();
         });
     }
 

@@ -17,6 +17,39 @@
                                 <td>:</td>
                                 <td>{{$data->nama}}</td>
                             </tr>
+
+                            <tr>
+                                <th colspan="3" class="pt-3">Daftar Item:</th>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <table class="table mt-2">
+                                        <thead>
+                                        <tr>
+                                            <th>Kode</th>
+                                            <th>Nama Item</th>
+                                            <th>Jenis</th>
+                                            <th>Supplier</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @forelse($data->masterItems as $item)
+                                            <tr>
+                                                <td>{{$item->kode}}</td>
+                                                <td>{{$item->nama}}</td>
+                                                <td>{{$item->jenis}}</td>
+                                                <td>{{$item->supplier}}</td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="4" class="text-center">Tidak ada item</td>
+                                            </tr>
+                                        @endforelse
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+
                         </table>
                         <a class="btn btn-info"
                            href="{{route('kategori.form', ['method' => 'edit', 'id' => $data->id])}}">Edit</a>

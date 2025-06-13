@@ -75,7 +75,7 @@ class KategoriController extends Controller
     public function singleView(string $kode)
     {
 
-        $data['data'] = KategoriItems::where('kode', $kode)->first();
+        $data['data'] = KategoriItems::with('masterItems')->where('kode', $kode)->first();
         return view('kategori_items.single.index', $data);
     }
 
