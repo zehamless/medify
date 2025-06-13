@@ -14,19 +14,26 @@ class MasterItemsController extends Controller
 
     public function search(Request $request)
     {
+        $request->validate([
+            'kode' => 'nullable|string',
+            'nama' => 'nullable|string',
+            'hargamin' => 'nullable|numeric',
+            'hargamax' => 'nullable|numeric',
+        ]);
+
         $kode = $request->kode;
         $nama = $request->nama;
         $hargamin = $request->hargamin;
         $hargamax = $request->hargamax;
 
-        $data_search = MasterItem::query();
-
-        if (!empty($kode)) $data_search = $data_search->where('kode', $kode);
-        if (!empty($nama)) $data_search = $data_search->where('nama', 'LIKE', '%' . $nama . '%');
-        if (!empty($hargamin)) $data_search = $data_search->where('harga_beli', '>=', $hargamin)->where('harga_beli', '<=', $hargamax);
-
-        $data_search = $data_search->select('kode', 'nama', 'jenis', 'harga_beli', 'laba', 'supplier')->orderBy('id')->get();
-
+        $data_search = MasterItem::query()
+            ->when(!empty($kode), fn($query) => $query->where('kode', $kode))
+            ->when(!empty($nama), fn($query) => $query->where('nama', 'LIKE', '%'.$nama.'%'))
+            ->when(!empty($hargamin), fn($query) => $query->where('harga_beli', '>=', $hargamin))
+            ->when(!empty($hargamax), fn($query) => $query->where('harga_beli', '<=', $hargamax))
+            ->select('kode', 'nama', 'jenis', 'harga_beli', 'laba', 'supplier')
+            ->orderBy('id')
+            ->get();
 
         return json_encode([
             'status' => 200,
@@ -86,13 +93,12 @@ class MasterItemsController extends Controller
     public function updateRandomData()
     {
         $data = MasterItem::get();
-        foreach($data as $item)
-        {
+        foreach ($data as $item) {
             $kode = $item->id;
             $kode = str_pad($kode, 5, '0', STR_PAD_LEFT);
 
-            $item->harga_beli = rand(100,1000000);
-            $item->laba = rand(10,99);
+            $item->harga_beli = rand(100, 1000000);
+            $item->laba = rand(10, 99);
             $item->kode = $kode;
             $item->supplier = $this->getRandomSupplier();
             $item->jenis = $this->getRandomJenis();
@@ -102,15 +108,15 @@ class MasterItemsController extends Controller
 
     private function getRandomSupplier()
     {
-        $array = ['Tokopaedi','Bukulapuk','TokoBagas','E Commurz','Blublu'];
-        $random = rand(0,4);
+        $array = ['Tokopaedi', 'Bukulapuk', 'TokoBagas', 'E Commurz', 'Blublu'];
+        $random = rand(0, 4);
         return $array[$random];
     }
 
     private function getRandomJenis()
     {
-        $array = ['Obat','Alkes','Matkes','Umum','ATK'];
-        $random = rand(0,4);
+        $array = ['Obat', 'Alkes', 'Matkes', 'Umum', 'ATK'];
+        $random = rand(0, 4);
         return $array[$random];
     }
 }

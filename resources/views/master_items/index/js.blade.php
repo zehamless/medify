@@ -38,7 +38,7 @@
             data: 'kode=' + filter_kode + '&nama=' + filter_nama + '&hargamin=' + filter_harga_min + '&hargamax=' + filter_harga_max,
             success: function(results) {
                 var data = results.data
-
+                console.log(data)
                 $.each(data, function(index, item) {
                     array_temp = [];
                     var harga_jual = item.harga_beli + item.harga_beli * item.laba / 100;
