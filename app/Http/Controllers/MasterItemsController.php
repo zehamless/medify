@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\KategoriItems;
 use App\Models\MasterItem;
 use Illuminate\Http\Request;
 
@@ -50,7 +51,8 @@ class MasterItemsController extends Controller
         }
         $data['item'] = $item;
         $data['method'] = $method;
-        return view('master_items.form.index', $data);
+        $kategori = KategoriItems::all();
+        return view('master_items.form.index', compact('data', 'kategori'));
     }
 
     public function singleView($kode)
@@ -68,11 +70,13 @@ class MasterItemsController extends Controller
             $kode = str_pad($kode, 5, '0', STR_PAD_LEFT);
             sleep(3);
         } else {
-            $data_item = MasterItem::find($id);
+            $data_item = MasterItem::find($id)?->load('kategoriItems');
             $kode = $data_item->kode;
         }
 
-        $data_item->foto = $request->file('foto')->store('uploads', 'public');
+        if ($request->hasFile('foto')) {
+            $data_item->foto = $request->file('foto')->store('uploads', 'public');
+        }
         $data_item->nama = $request->nama;
         $data_item->harga_beli = $request->harga_beli;
         $data_item->laba = $request->laba;
@@ -80,6 +84,8 @@ class MasterItemsController extends Controller
         $data_item->supplier = $request->supplier;
         $data_item->jenis = $request->jenis;
         $data_item->save();
+
+        $data_item->kategoriItems()->sync($request->kategori ?? []);
 
         return redirect('master-items');
     }

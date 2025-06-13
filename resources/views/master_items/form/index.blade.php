@@ -9,7 +9,7 @@
             </div>
             <div class="card">
 
-                @if($method == 'new')
+                @if($data['method'] == 'new')
                 <div class="card-header">Buat Master Item Baru</div>
                 @else
                 <div class="card-header">Edit Master Item</div>
