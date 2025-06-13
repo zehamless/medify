@@ -38,6 +38,12 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
                         <!-- Authentication Links -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('master-items.index') }}">Master Item</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('kategori.index') }}">Kategori Item</a>
+                        </li>
                         @guest
                         @if (Route::has('login'))
                         <li class="nav-item">
