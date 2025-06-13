@@ -48,6 +48,7 @@ class KategoriController extends Controller
             $item = new KategoriItems();
             $kode = KategoriItems::count('id');
             ++$kode;
+
             $kode = str_pad($kode, 5, '0', STR_PAD_LEFT);
             $item->kode = $kode;
         } else {

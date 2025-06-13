@@ -9,7 +9,7 @@ return new class extends Migration {
     {
         Schema::create('kategori_items', function (Blueprint $table) {
             $table->id();
-            $table->string('kode')->index();
+            $table->string('kode')->unique();
             $table->string('nama');
             $table->timestamps();
         });

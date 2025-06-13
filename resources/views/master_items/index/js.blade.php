@@ -8,7 +8,7 @@
     var data_per_fetch = 500;
     var data_fetched = 0;
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('#table').DataTable({
             searching: false,
             order: [[0, 'desc']],
@@ -16,12 +16,19 @@
         getData()
     });
 
-    $('.btn-get-data').click(function() {
+    $('.btn-get-data').click(function () {
+        var filter_harga_min = $('#filter-harga-min').val()
+        var filter_harga_max = $('#filter-harga-max').val()
+
+        if (filter_harga_max && filter_harga_max <= filter_harga_min) {
+            alert('Harga maksimum harus lebih besar dari harga minimum');
+            return;
+        }
         getData()
     })
 
-    function getData(){
-        
+    function getData() {
+
         $('#loading-filter').show();
         var dataTableObj = $('#table').DataTable();
         var filter_kode = $('#filter-kode').val()
@@ -36,10 +43,10 @@
             tryCount: 0,
             retryLimit: 3,
             data: 'kode=' + filter_kode + '&nama=' + filter_nama + '&hargamin=' + filter_harga_min + '&hargamax=' + filter_harga_max,
-            success: function(results) {
+            success: function (results) {
                 var data = results.data
                 console.log(data)
-                $.each(data, function(index, item) {
+                $.each(data, function (index, item) {
                     array_temp = [];
                     var harga_jual = item.harga_beli + item.harga_beli * item.laba / 100;
                     harga_jual = Math.round(harga_jual)
@@ -47,7 +54,7 @@
 
                     var html = `<a href="{{url('master-items/view/')}}/` + kode + `" class="btn btn-primary">View</a>`
 
-                    $.each(item, function(obj_name, obj_value) {
+                    $.each(item, function (obj_name, obj_value) {
                         if (obj_name == 'laba') return false;
                         array_temp.push(obj_value)
                     })
@@ -60,7 +67,7 @@
                 });
                 $('#loading-filter').hide();
             },
-            error: function(xhr, textStatus, errorThrown) {
+            error: function (xhr, textStatus, errorThrown) {
                 this.tryCount++;
                 if (this.tryCount <= this.retryLimit) {
                     $.ajax(this);
