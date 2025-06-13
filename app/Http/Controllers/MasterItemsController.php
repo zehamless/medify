@@ -65,6 +65,7 @@ class MasterItemsController extends Controller
             $kode = $data_item->kode;
         }
 
+        $data_item->foto = $request->file('foto')->store('uploads', 'public');
         $data_item->nama = $request->nama;
         $data_item->harga_beli = $request->harga_beli;
         $data_item->laba = $request->laba;
